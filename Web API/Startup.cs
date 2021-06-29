@@ -1,6 +1,7 @@
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Domain;
+using Domain.Logging;
 using Domain.Repository;
 using Infrastructure.Logging;
 using Infrastructure.Repository;
