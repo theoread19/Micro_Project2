@@ -33,6 +33,11 @@ namespace Infrastructure.Repository
             return context.MessageTable.Find(id);
         }
 
+        public List<MessageModel> GetBySenderId(long id)
+        {
+            return context.MessageTable.Where(e => e.SenderId == id).ToList();
+        }
+
         public void Insert(MessageModel model)
         {
             context.MessageTable.Add(model);
