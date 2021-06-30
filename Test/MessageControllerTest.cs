@@ -1,4 +1,5 @@
 ﻿using Domain;
+using Domain.Logging;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -44,6 +45,19 @@ namespace Test
 
             this._MessageService.Verify(m => m.GetById(id));
             result.Should().BeEquivalentTo(new MessageRequest());
+        }
+
+        [TestMethod]
+        [DataRow(2)]
+        public void Get_Message_By_Sender_Id(long id)
+        {
+            
+            this._MessageService.Setup(m => m.GetMessagesBySenderId(id)).Returns(new List<MessageRequest>());
+
+            var result = this._MessageController.GetMessagesBySenderId(id);
+
+            this._MessageService.Verify(m => m.GetMessagesBySenderId(id));
+            result.Should().BeEquivalentTo(new List<MessageRequest>());
         }
 
         [TestMethod]
