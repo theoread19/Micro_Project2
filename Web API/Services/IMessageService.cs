@@ -13,5 +13,6 @@ namespace Web_API.Services
         public void Insert(MessageRequest req);
         public void Update(MessageRequest req);
         public void Delete(long id);
+        public List<MessageRequest> GetMessagesBySenderId(long id);
     }
 }

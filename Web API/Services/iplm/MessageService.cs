@@ -41,6 +41,19 @@ namespace Web_API.Services.iplm
             return converter.ToReq(this._messageRepository.GetById(id));
         }
 
+        public List<MessageRequest> GetMessagesBySenderId(long id)
+        {
+            var model = this._messageRepository.GetBySenderId(id);
+            List<MessageRequest> reqs = new List<MessageRequest>();
+            foreach (var item in model)
+            {
+                MessageRequest req = new MessageRequest();
+                req = converter.ToReq(item);
+                reqs.Add(req);
+            }
+            return reqs;
+        }
+
         public void Insert(MessageRequest req)
         {
             this._messageRepository.Insert(converter.ToModel(req));

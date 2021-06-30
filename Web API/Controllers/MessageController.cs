@@ -1,4 +1,5 @@
 ﻿using Domain;
+using Domain.Logging;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -37,6 +38,21 @@ namespace Web_API.Controllers
                 throw new Exception("Exception while fetching all the message from the storage.");
             }
            
+        }
+
+        [HttpGet("senderId={id}")]
+        public List<MessageRequest> GetMessagesBySenderId(long id)
+        {
+            try
+            {
+                this._loggerManager.LogInfo("Fetching all the message send by senderId from the storage");
+                return this._messageService.GetMessagesBySenderId(id);
+            }
+            catch (Exception)
+            {
+                throw new Exception("Exception while fetching all the message send by senderId from the storage.");
+            }
+            
         }
 
         // GET api/<MessageController>/5
