@@ -9,6 +9,7 @@ namespace Domain.Repository
     {
         public List<MessageModel> GetAll();
         public MessageModel GetById(long id);
+        public List<MessageModel> GetBySenderId(long id);
         public void Insert(MessageModel model);
         public void Update(MessageModel model);
         public void Delete(long id);
