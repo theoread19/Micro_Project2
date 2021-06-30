@@ -60,3 +60,4 @@
 2021-06-30 13:34:07.6720 INFO Fetching all the message from the storage
 2021-06-30 13:34:23.6061 INFO Updating a message to the storage
 2021-06-30 13:34:36.3540 INFO Fetching all the message from the storage
+2021-06-30 14:00:54.0559 INFO Fetching all the message send by senderId from the storage
