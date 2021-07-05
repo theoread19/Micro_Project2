@@ -3,6 +3,7 @@ using Autofac.Extensions.DependencyInjection;
 using Domain;
 using Domain.Logging;
 using Domain.Repository;
+using Infrastructure.Kafka.Consumer;
 using Infrastructure.Logging;
 using Infrastructure.Repository;
 using Microsoft.AspNetCore.Builder;
@@ -45,6 +46,9 @@ namespace Web_API
 
             this.ApplicationContainer = builder.Build();
 
+            //kafka
+            services.AddSingleton<IHostedService, ConsumerConfigure>();
+
             //repository
             services.AddScoped<IMessageRepository, MessageRepository>();
 
@@ -56,6 +60,8 @@ namespace Web_API
             builder.RegisterType<MessageRepository>().As<IMessageRepository>();
 
             builder.RegisterType<MessageService>().As<IMessageService>();
+
+           
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
