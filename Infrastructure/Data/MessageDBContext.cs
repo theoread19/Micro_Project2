@@ -12,6 +12,7 @@ namespace Infrastructure.Data
     {
 
         public virtual DbSet<MessageModel> MessageTable { get; set; }
+        public virtual DbSet<UserModel> UserModels { get; set; }
 
         public MessageDBContext()
         {
@@ -39,6 +40,21 @@ namespace Infrastructure.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+
+            modelBuilder.Entity<UserModel>(e => {
+                e.HasKey(e => e.Id);
+
+                e.Property(e => e.Fullname)
+                   .IsRequired()
+                   .HasMaxLength(50)
+                   .HasColumnName("fullname");
+
+                e.Property(e => e.Email)
+                    .HasMaxLength(100)
+                    .HasColumnName("email");
+            });
+
+
             modelBuilder.Entity<MessageModel>(e =>
             {
                 e.ToTable("message-table");
@@ -60,12 +76,26 @@ namespace Infrastructure.Data
                     .HasColumnType("DateTime");
 
                 e.Property(e => e.SenderId)
-                    .IsRequired();
+                    .HasColumnName("senderId");
 
                 e.Property(e => e.RecipientId)
-                    .IsRequired();
+                    .HasColumnName("recipientId");
+
+                e.HasOne(e => e.Sender)
+                    .WithMany()
+                    .HasForeignKey(p => p.SenderId)
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .HasConstraintName("FK_User_Message_Se");
+
+                e.HasOne(e => e.Recipeint)
+                    .WithMany()
+                    .HasForeignKey(p => p.RecipientId)
+                    .OnDelete(DeleteBehavior.ClientNoAction)
+                    .HasConstraintName("FK_User_Message_Re");
             });
 
+
+ 
 
         }
     }
