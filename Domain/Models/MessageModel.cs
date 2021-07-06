@@ -12,5 +12,8 @@ namespace Domain.Models
         public long SenderId { get; set; }
         public long RecipientId { get; set; }
         public DateTime CreateDate { get; set; }
+
+        public virtual UserModel Sender { get; set; }
+        public virtual UserModel Recipeint { get; set; }
     }
 }
