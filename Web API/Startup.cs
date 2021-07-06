@@ -47,7 +47,8 @@ namespace Web_API
             this.ApplicationContainer = builder.Build();
 
             //kafka
-            services.AddSingleton<IHostedService, ConsumerConfigure>();
+//            services.AddSingleton<BackgroundService, ConsumerConfigure>();
+            services.AddHostedService<ConsumerConfigure>();
 
             //repository
             services.AddScoped<IMessageRepository, MessageRepository>();
@@ -61,7 +62,7 @@ namespace Web_API
 
             builder.RegisterType<MessageService>().As<IMessageService>();
 
-           
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
