@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(MessageDBContext))]
-    [Migration("20210706015457_V2")]
-    partial class V2
+    [Migration("20210708095915_V0")]
+    partial class V0
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -36,7 +36,7 @@ namespace Infrastructure.Migrations
                     b.Property<DateTime>("CreateDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("DateTime")
-                        .HasDefaultValue(new DateTime(2021, 7, 6, 8, 54, 57, 172, DateTimeKind.Local).AddTicks(1864));
+                        .HasDefaultValue(new DateTime(2021, 7, 8, 16, 59, 14, 899, DateTimeKind.Local).AddTicks(1546));
 
                     b.Property<long>("RecipientId")
                         .HasColumnType("bigint")

@@ -34,7 +34,7 @@ namespace Infrastructure.Migrations
                     b.Property<DateTime>("CreateDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("DateTime")
-                        .HasDefaultValue(new DateTime(2021, 7, 6, 8, 54, 57, 172, DateTimeKind.Local).AddTicks(1864));
+                        .HasDefaultValue(new DateTime(2021, 7, 8, 16, 59, 14, 899, DateTimeKind.Local).AddTicks(1546));
 
                     b.Property<long>("RecipientId")
                         .HasColumnType("bigint")
