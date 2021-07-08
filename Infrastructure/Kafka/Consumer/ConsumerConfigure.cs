@@ -1,29 +1,16 @@
 ﻿using Confluent.Kafka;
-using Domain.Models;
+using Infrastructure.Repository;
 using Microsoft.Extensions.Hosting;
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using UserProtoBufService;
 
 namespace Infrastructure.Kafka.Consumer
 {
     public class ConsumerConfigure : BackgroundService
     {
-        private readonly string _topic = "test1";
-
-/*        public async Task StartAsync(CancellationToken cancellationToken)
-        {
-            
-        }
-        public async Task StopAsync(CancellationToken cancellationToken)
-        {
-            await Task.CompletedTask;
-        }*/
+        private readonly string _topic = "test5";
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
@@ -35,7 +22,11 @@ namespace Infrastructure.Kafka.Consumer
                 EnableAutoCommit = false
             };
 
-            using (var builder = new ConsumerBuilder<string, byte []>(conf).Build())
+
+            using (var builder = new ConsumerBuilder<string, UserProtoReq>(conf)
+                .SetValueDeserializer(new UserDeserializer())
+                .SetErrorHandler((_, e) => Console.WriteLine($"Error: {e.Reason}"))
+                .Build())
             {
                 builder.Subscribe(this._topic);
 
@@ -44,28 +35,32 @@ namespace Infrastructure.Kafka.Consumer
                 {
                     try
                     {
+                        Console.WriteLine("Starting consume");
+                        // builder.Consume return null and project can't load swagger api if there is no message
+                        // waiting for consume when run project 
                         var consumer = builder.Consume(cancelToken.Token);
-
+                        Console.WriteLine("bb");
                         var data = consumer.Message.Value;
-                        MemoryStream memStream = new MemoryStream();
-                        BinaryFormatter binForm = new BinaryFormatter();
-                        memStream.Write(data, 0, data.Length);
-                        memStream.Seek(0, SeekOrigin.Begin);
-                        var obj = (UserModel)binForm.Deserialize(memStream);
-                        Console.WriteLine(obj.Fullname);
+                        if (data != null)
+                        {
+                            var handle = new HandleConsumer(new UserRepository());
+                            handle.Handle(data);
+                        }
+
                         builder.Commit();
-                        Console.WriteLine($"Message: {consumer.Message.Key} received from {consumer.TopicPartitionOffset} and data {System.Text.Encoding.UTF8.GetString(consumer.Message.Value)}");
-                       
-                        //await Task.Delay(1000);
+                        Console.WriteLine($"Message: received from {consumer.TopicPartitionOffset} and data");
+
+                        await Task.Delay(1000);
                     }
-                    catch (Exception)
+                    catch (Exception e)
                     {
-                        Console.WriteLine("Error");
+                        Console.WriteLine("Error:" + e );
                         builder.Close();
+                        await Task.CompletedTask;
                     }
                 }
+                
             }
-            await Task.CompletedTask;
         }
     }
 }
