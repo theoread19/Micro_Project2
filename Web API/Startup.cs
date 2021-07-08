@@ -18,6 +18,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using UserProject.CustomerExceptionMiddleware;
 using Web_API.Services;
 using Web_API.Services.iplm;
 
@@ -37,6 +38,7 @@ namespace Web_API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
             services.AddControllers();
 
             services.AddSwaggerGen();
@@ -49,12 +51,14 @@ namespace Web_API
             //kafka
 //            services.AddSingleton<BackgroundService, ConsumerConfigure>();
             services.AddHostedService<ConsumerConfigure>();
-
             //repository
             services.AddScoped<IMessageRepository, MessageRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
+
 
             //service
             services.AddScoped<IMessageService, MessageService>();
+            services.AddScoped<IUserService, UserService>();
             //
             services.AddSingleton<ILoggerManager, LoggerManager>();
 
@@ -62,11 +66,14 @@ namespace Web_API
 
             builder.RegisterType<MessageService>().As<IMessageService>();
 
+            builder.RegisterType<UserRepository>().As<IUserRepository>();
 
+            builder.RegisterType<UserService>().As<IUserService>(); 
+  
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerManager logger)
         {
             if (env.IsDevelopment())
             {
@@ -75,14 +82,11 @@ namespace Web_API
 
             app.UseHttpsRedirection();
 
+            app.ConfigureExceptionHandler((LoggerManager)logger);
+
             app.UseRouting();
 
             app.UseAuthorization();
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
 
             app.UseSwagger(c =>
             {
@@ -96,6 +100,13 @@ namespace Web_API
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
                 c.RoutePrefix = string.Empty;
             });
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
+
+           
         }
     }
 }
