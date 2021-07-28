@@ -10,7 +10,7 @@ namespace Infrastructure.Kafka.Consumer
 {
     public class ConsumerConfigure : BackgroundService
     {
-        private readonly string _topic = "test5";
+        private readonly string _topic = "message";
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {

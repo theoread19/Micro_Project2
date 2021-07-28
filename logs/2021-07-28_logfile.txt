@@ -1,0 +1,2 @@
+2021-07-28 10:07:59.6690 INFO Creating a message to the storage
+2021-07-28 10:08:19.5502 INFO Fetching all the message from the storage
